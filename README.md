@@ -1,6 +1,6 @@
 # Traffic Sign Recognition Using a Neural Network
 
-The goals / steps of this project are the following:
+This project is part of the [Udacity Self-Driving Car Nanodegree Program](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project). The goals / steps of this project are the following:
 
 * Load a data set of traffic sign images (see below for links to the project data set)
 * Explore, summarize and visualize the data set
