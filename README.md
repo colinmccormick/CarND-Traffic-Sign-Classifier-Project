@@ -1,7 +1,5 @@
 # Traffic Sign Recognition Using a Neural Network
 
----
-
 The goals / steps of this project are the following:
 
 * Load a data set of traffic sign images (see below for links to the project data set)
@@ -41,15 +39,15 @@ I began by using the standard LeNet architecture on the training data with no pr
 
 I used a training operation based on the AdamOptimizer, and a loss operation based on calculating the cross entropy between the one-hot training lables and the logits resulting from the model (all defined in the "Train, Validate and Test the Model" section of the notebook). 
 
-With no pre-processing, and the default hyperparameters given in the course (10 epochs, batch size of 128, and a learning rate of 0.001), the model trains to a validation accuracy of 0.848. Not bad, but well below the project target of 0.93. As a quick test, I then tried increasing the learning rate to 0.005, which resulted in a model with validation accuracy 0.844. Learning faster doesn't necessarily help!
+1. With no pre-processing, and the default hyperparameters given in the course (10 epochs, batch size of 128, and a learning rate of 0.001), the model trains to a validation accuracy of 0.848. Not bad, but well below the project target of 0.93. As a quick test, I then tried increasing the learning rate to 0.005, which resulted in a model with validation accuracy 0.844. Learning faster doesn't necessarily help!
 
-Next, I tried pre-processing the data using the simple normalization method of subtracting 128 from the pixel values and then dividing by 128. (It's important to cast the training data tensor from int to float, or this method will just result in zeros.) Normalization is important for successful training, because data with a mean value that is far from zero forces the training process to adjust the weights and bias tensors by large amounts, which is both inefficient and prone to numerical noise. Normalization clearly helped, because using the default hyperparameters (including learning rate of 0.001) the network trained to a validation accuracy of 0.926 - almost our target value.
+2. Next, I tried pre-processing the data using the simple normalization method of subtracting 128 from the pixel values and then dividing by 128. (It's important to cast the training data tensor from int to float, or this method will just result in zeros.) Normalization is important for successful training, because data with a mean value that is far from zero forces the training process to adjust the weights and bias tensors by large amounts, which is both inefficient and prone to numerical noise. Normalization clearly helped, because using the default hyperparameters (including learning rate of 0.001) the network trained to a validation accuracy of 0.926 - almost our target value.
 
-Following this, I tried grayscaling the images and then normalizing them. This makes our model smaller (it only needs to use one color channel instead of three) so it might help. I used an RGB conversion method based on [this discussion](https://stackoverflow.com/questions/12201577/how-can-i-convert-an-rgb-image-into-grayscale-in-python). Again using the default hyperparameters, the network trained to a validation accuracy of 0.885. So this wasn't very helpful.
+3. Following this, I tried grayscaling the images and then normalizing them. This makes our model smaller (it only needs to use one color channel instead of three) so it might help. I used an RGB conversion method based on [this discussion](https://stackoverflow.com/questions/12201577/how-can-i-convert-an-rgb-image-into-grayscale-in-python). Again using the default hyperparameters, the network trained to a validation accuracy of 0.885. So this wasn't very helpful.
 
-I next tried using learning rate decay to improve the accuracy (returning to the pre-processing step that normalized the color images in the training data, but did not grayscale them). With several variants of the decay path (inital rate = 0.002, decay steps = 500, and decay rate = 0.8 and 0.9) the final trained validation accuracy was in the range of 0.923 to 0.926. Therefore this didn't seem to help.
+4. I next tried using learning rate decay to improve the accuracy (returning to the pre-processing step that normalized the color images in the training data, but did not grayscale them). With several variants of the decay path (inital rate = 0.002, decay steps = 500, and decay rate = 0.8 and 0.9) the final trained validation accuracy was in the range of 0.923 to 0.926. Therefore this didn't seem to help.
 
-Finally, I modified the pre-processing step to independently normalize each color channel for each image. To do this, for each image in the training set I found the min and max pixel value in each color channel, and then scaled the pixel values for that channel so they were zero mean and had a max and min of +/-1. Using this pre-processing technique and learning rate decay, the model trained to a validation accuracy of 0.955 in ten epochs (initial learning rate = 0.005, decay steps = 500, decay rate = 0.8). It seems like image-specific, channel-dependent normalization is the way to go.
+5. Finally, I modified the pre-processing step to independently normalize each color channel for each image. To do this, for each image in the training set I found the min and max pixel value in each color channel, and then scaled the pixel values for that channel so they were zero mean and had a max and min of +/-1. Using this pre-processing technique and learning rate decay, the model trained to a validation accuracy of 0.955 in ten epochs (initial learning rate = 0.005, decay steps = 500, decay rate = 0.8). It seems like image-specific, channel-dependent normalization is the way to go.
 
 To check whether the model is over-fitting, I also calculated the training set accuracy for this model, which is 0.999. This is clear evidence of over-fitting, since the training set accuracy is much higher than the validation set accuracy. To address this, I added a dropout layer before the final fully connected layer, with a keep probability of 50%. This results in a validation accuracy of 0.954, with the training accuracy still 0.999. 
 
@@ -112,3 +110,14 @@ Here are the results of the prediction for each sign, and the top softmax value 
 | Yield   				| Yield 					| 1.000			|
 
 The code for the predictions and the top 5 softmax values are in the final two cells of the notebook.
+
+## 4. Future Directions
+
+There are several possible ways to improve this model:
+
+1. The model is still over-fitting, despite two dropout layers. I could also add L2 regularization, but I'm not sure how that interacts with dropout. It might instead be better to reduce the dimensionality of the fully connected layers.
+
+2. As mentioned above, it would be possible to synthesize data by left/right flipping some of the images in the training set. For symmetric signs and left/right mirror pairs of signs, this would product viable synthetic data. It would also be possible to add some distortion or rotational jitter, although the latter would require resampling the images and might require going back to the original images before they were cropped down to 32x32 pixels.
+
+3. There's always the brute-force approach of training for more epochs; using AWS GPUs it wouldn't be too difficult to increase the epoch count to 50 or 100 (which would probably require adjusting the learning rate decay to be useful).
+
