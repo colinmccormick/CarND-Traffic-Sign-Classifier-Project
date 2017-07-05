@@ -33,6 +33,8 @@ In any machine learning project, it's important to double-check that that the da
 
 Finally, I display examples of all 43 traffic signs in a grid, to get a better sense of what they all look like. In the future, I would like to improve the model accuracy by synthesizing training data, and one simple way to do this would be to invert (left-right) all images for signs that are symmetric, and add them as additional training images. A refinement to this would be to invert signs that are mirror images of other signs (e.g. left turn only/right turn only) and use them as training data for the mirror-image class. Having this visual grid of signs would enable me to determine which signs are symmetric, and which are mirror images. (I haven't done data synethesis for this project, however.) 
 
+![Examples of all 43 classes of traffic signs](./examples/all_signs.png)
+
 ## 2. Data Pre-processing and Model Training
 
 I began by using the standard LeNet architecture on the training data with no pre-processing. LeNet seems like an appropriate model to use, because its convolutional layers mean that it performs well with visual images. It's quite effective at recognizing hand-written numerals in the MNIST dataset, and many of the traffic signs are basically symbols with geometric shapes that are similar to numerals (e.g. turn arrows, diagonal slashes, etc.). The layer architecture and sizes are summarized in the table at the end of this section.
@@ -92,7 +94,9 @@ I downloaded ten RGB images of German traffic signs from various sites on the we
 ![No entry](./examples/sign07-17.png) ![General caution](./examples/sign08-18.png)
 ![Turn right ahead](./examples/sign09-33.png) ![Yield](./examples/sign10-13.png)
 
-The trained network predicted 9/10 correctly. The incorrectly classified one was one of the two "30km/h" signs. Here are the results of the prediction:
+The trained network predicted 9/10 correctly. The incorrectly classified one was one of the two "30km/h" signs. This isn't terribly surprising, because that image has several problems: it's not well-centered, it's clipped at the top, and there's some residual text from a different sign at the bottom. This highlights the fact that the classifier isn't very robust yet. With some additional pre-processing (such as trimming the residual text at the bottom) it might be possible for the classifier to get this one right.
+
+Here are the results of the prediction for each sign, and the top softmax value (probability/certainty of the prediction):
 
 | Image			        |     Prediction	   		|   Softmax   	|
 |:---------------------:|:-------------------------:| :------------:|
