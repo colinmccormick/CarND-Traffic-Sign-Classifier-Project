@@ -1,4 +1,4 @@
-#**Traffic Sign Recognition Using a Neural Network** 
+# Traffic Sign Recognition Using a Neural Network
 
 ---
 
@@ -11,11 +11,11 @@ The goals / steps of this project are the following:
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report (you're reading it!)
 
-###0. Library Set Up and Data Loading
+## 0. Library Set Up and Data Loading
 
 The data we use for this project is the [German Traffic Sign Recognition Benchmark](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Fortunately, Udacity has already pre-processed the full data to extract centered RGB images of traffic signs (32x32 pixels) and split them into train, test and validation sets, with labels. It's easy to load these into the appropriate variables from the Udacity-provided pickle file. 
 
-###1. Data Set Summary & Exploration
+## 1. Data Set Summary & Exploration
 
 In any machine learning project, it's important to double-check that that the data are actually what they're supposed to be. I've spent many hours trying to run down bugs in my code that would have been much easier if I had done better sanity checks on the training data right at the start! In that spirit, I run the following basic checks on the training data:
 
@@ -29,11 +29,11 @@ In any machine learning project, it's important to double-check that that the da
 
 5. Ideally, training data should be evenly balanced across classes. To check this, I use the numpy unique() function to count the instances of each of the 43 labels, and then display this as a histogram. It reveals that some signs are far more represented in the training data. Using the python min() and max() functions I also check which signs are most and least represented in the training data.
 
-![Histogram of frequency of each sign type in the training data][./examples/histogram.png]
+![Histogram of frequency of each sign type in the training data](./examples/histogram.png)
 
 Finally, I display examples of all 43 traffic signs in a grid, to get a better sense of what they all look like. In the future, I would like to improve the model accuracy by synthesizing training data, and one simple way to do this would be to invert (left-right) all images for signs that are symmetric, and add them as additional training images. A refinement to this would be to invert signs that are mirror images of other signs (e.g. left turn only/right turn only) and use them as training data for the mirror-image class. Having this visual grid of signs would enable me to determine which signs are symmetric, and which are mirror images. (I haven't done data synethesis for this project, however.) 
 
-###2. Data Pre-processing and Model Training
+## 2. Data Pre-processing and Model Training
 
 I began by using the standard LeNet architecture on the training data with no pre-processing. LeNet seems like an appropriate model to use, because its convolutional layers mean that it performs well with visual images. It's quite effective at recognizing hand-written numerals in the MNIST dataset, and many of the traffic signs are basically symbols with geometric shapes that are similar to numerals (e.g. turn arrows, diagonal slashes, etc.). The layer architecture and sizes are summarized in the table at the end of this section.
 
@@ -82,15 +82,15 @@ My final model consisted of the following layers:
 | Fully connected		| Outputs 43x1									|
 | Softmax				| Outputs prediction      						|
 
-###3. Testing the Model on New Images
+## 3. Testing the Model on New Images
 
 I downloaded ten RGB images of German traffic signs from various sites on the web, and rescaled them to 32x32 pixels:
 
-![Right-of-way at the next intersection][./examples/sign01-11.png] ![Stop][./examples/sign02-14.png] 
-![Stop][./examples/sign03-14.png] ![Road work][./examples/sign04-25.png] 
-![Speed limit (30km/h)][./examples/sign05-01.png] ![Speed limit (30km/h)][./examples/sign06-01.png]
-![No entry][./examples/sign07-17.png] ![General caution][./examples/sign08-18.png]
-![Turn right ahead][./examples/sign09-33.png] ![Yield][./examples/sign10-13.png]
+![Right-of-way at the next intersection](./examples/sign01-11.png) ![Stop](./examples/sign02-14.png)
+![Stop](./examples/sign03-14.png) ![Road work](./examples/sign04-25.png)
+![Speed limit (30km/h)](./examples/sign05-01.png) ![Speed limit (30km/h)](./examples/sign06-01.png)
+![No entry](./examples/sign07-17.png) ![General caution](./examples/sign08-18.png)
+![Turn right ahead](./examples/sign09-33.png) ![Yield](./examples/sign10-13.png)
 
 The trained network predicted 9/10 correctly. The incorrectly classified one was one of the two "30km/h" signs. Here are the results of the prediction:
 
@@ -107,4 +107,4 @@ The trained network predicted 9/10 correctly. The incorrectly classified one was
 | Turn right ahead		| Turn right ahead  		| 0.861			|
 | Yield   				| Yield 					| 1.000			|
 
-The code for the predictions and the top 5 softmax values is in the final two cells of the notebook.
+The code for the predictions and the top 5 softmax values are in the final two cells of the notebook.
